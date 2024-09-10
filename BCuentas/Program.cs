@@ -5,15 +5,22 @@ using Core.Infraestructure.Models;
 using Core.Infraestructure.Repository;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Prometheus.Client;
+using Prometheus.Client.AspNetCore;
 using Serilog;
+using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -25,13 +32,11 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "Api BCuentas",
         Version = "v1",
-  
         Contact = new OpenApiContact
         {
             Name = "Cristian Urbina",
             Email = "eduardourbina119@gmail.com"
         }
-
     });
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -40,9 +45,9 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddAutoMapper(typeof(CoreMapper));
 var connectionString = builder.Configuration.GetConnectionString("Database");
-//DBContext
-builder.Services.AddDbContext<BcuentasContext>(options => { options.UseSqlServer(connectionString); });
 
+// DBContext
+builder.Services.AddDbContext<BcuentasContext>(options => options.UseSqlServer(connectionString));
 
 // Registrar FluentValidation
 builder.Services.AddFluentValidationAutoValidation();
@@ -55,6 +60,7 @@ builder.Services.AddScoped<ITarjetaRepository, TarjetasRepository>();
 builder.Services.AddScoped<IEstadoCuentaRepository, EstadoCuentaRepository>();
 builder.Services.AddScoped<IParametrosConfiguracion, ParametrosConfiguracionRepository>();
 builder.Services.AddScoped<ITransaccionesRepository, TransaccionesRepository>();
+
 // Configura Serilog desde appsettings.json
 try
 {
@@ -76,10 +82,13 @@ catch (Exception ex)
     }
 }
 
+// Configuración de HealthChecks
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<BcuentasContext>()
+    .AddDiskStorageHealthCheck(options => options.AddDrive("C:\\", 1024));
 
 
 
-builder.Host.UseSerilog();
 
 var app = builder.Build();
 
@@ -92,9 +101,36 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.UseRouting();
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+
+    // Configuración de HealthChecks
+    endpoints.MapHealthChecks("/health", new HealthCheckOptions
+    {
+        ResponseWriter = async (context, report) =>
+        {
+            context.Response.ContentType = "application/json";
+            var result = JsonSerializer.Serialize(new
+            {
+                status = report.Status.ToString(),
+                checks = report.Entries.Select(entry => new
+                {
+                    name = entry.Key,
+                    status = entry.Value.Status.ToString(),
+                    description = entry.Value.Description,
+                    duration = entry.Value.Duration
+                })
+            });
+            await context.Response.WriteAsync(result);
+        }
+    });
+
+    // Exponer métricas usando Prometheus
+
+});
 
 app.Run();

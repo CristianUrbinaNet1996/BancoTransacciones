@@ -2,6 +2,7 @@
 using Core.Infraestructure.Exceptions;
 using Core.Infraestructure.Interfaces;
 using DTO.DTO.Models;
+using DTO.DTO.Request;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -58,18 +59,58 @@ namespace BCuentas.Controllers
             catch (CreditCardNotFoundException ex)
             {
                 _logger.LogError(ex.Message);
-                return new BaseResponse<List<TransaccionesDTO>>() { Message= ex.Message };  
+                return new BaseResponse<List<TransaccionesDTO>>() { Message= ex.Message, Status = false };  
             }
             catch (Exception ex) {
                 _logger.LogError(ex.Message);
-                return new BaseResponse<List<TransaccionesDTO>>() { Message = ex.Message };
+                return new BaseResponse<List<TransaccionesDTO>>() { Message = ex.Message, Status = false };
             }
         }
 
-        // POST api/<TransaccionesController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+
+        /// <summary>
+        /// Creacion de transacciones de cualquier tipo.
+        /// </summary>
+        /// <remarks>
+        /// Este endpoint permite crear las transacciones de una tarjeta.
+        /// 
+        /// <para>Header:</para>
+        /// <para>Authorization: JWT Firebase Auth</para>
+        /// 
+        ///
+        /// </remarks>
+        /// <param name="transacciones">Contiene el modelo request para crear la transaccion</param>
+        /// <returns>Un objeto BaseResponse que contiene los datos de la transaccion que se acaba de crear</returns>
+        /// <response code="200">Devuelve la transacción creada.</response>
+        /// <response code="400">Devuelve un mensaje de error si los parámetros son inválidos.</response>
+        /// <response code="404">Devuelve un mensaje de error si la tarjeta no se encuentra.</response>
+        [HttpPost("CreateTransaccion")]
+        public async Task<BaseResponse<TransaccionesDTO>> Post([FromBody] CreateTransaccionRequestDto transacciones)
         {
+            try
+            {
+                _logger.LogInformation("Iniciando con la obtencion de las transacciones para la tarjeta {id}", transacciones.TarjetaId);
+                var result = await _transactions.CreateTransaccion(transacciones);
+
+                return new BaseResponse<TransaccionesDTO>(result);
+
+            }
+            catch (CreditCardNotFoundException ex)
+            {
+                _logger.LogError(ex.Message);
+                return new BaseResponse<TransaccionesDTO>() { Message = ex.Message,Status=false };
+            }
+
+            catch(InsufficientFundsException ex)
+            {
+                _logger.LogError(ex.Message);
+                return new BaseResponse<TransaccionesDTO>() { Message = ex.Message, Status = false };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return new BaseResponse<TransaccionesDTO>() { Message = ex.Message,Status=false };
+            }
         }
 
         // PUT api/<TransaccionesController>/5

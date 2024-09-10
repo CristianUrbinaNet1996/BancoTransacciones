@@ -12,14 +12,14 @@ using BCuentas.Helpers.Validators;
 [ApiController]
 [Route("api/[controller]")]
 
-public class CuentasController : ControllerBase
+public class EstadoCuentaController : ControllerBase
 {
    
     private readonly IMapper _mapper;
     private readonly IEstadoCuentaRepository _estadoCuentaRepository;
 
-    private ILogger<CuentasController> _logger;
-    public CuentasController(IEstadoCuentaRepository estadoCuentaRepository, IMapper mapper,ILogger<CuentasController> logger)
+    private ILogger<EstadoCuentaController> _logger;
+    public EstadoCuentaController(IEstadoCuentaRepository estadoCuentaRepository, IMapper mapper,ILogger<EstadoCuentaController> logger)
     {
          _estadoCuentaRepository = estadoCuentaRepository;
          _mapper = mapper;
@@ -43,8 +43,8 @@ public class CuentasController : ControllerBase
     /// <response code="200">Devuelve el estado de cuenta solicitado.</response>
     /// <response code="400">Devuelve un mensaje de error si los parámetros son inválidos.</response>
     /// <response code="404">Devuelve un mensaje de error si la tarjeta no se encuentra.</response>
-    [HttpPost("GetEstadoCuenta")]
-    public async Task<BaseResponse<EstadosCuentaDto>> GetEstadoCuenta([FromBody] EstadoCuentaRequestDto request)
+    [HttpPost("GetEstadoCuentaByRangeDates")]
+    public async Task<BaseResponse<EstadosCuentaDto>> GetEstadoCuentaByRangeDates([FromBody] EstadoCuentaRequestDto request)
     {
         try
         {
@@ -53,6 +53,34 @@ public class CuentasController : ControllerBase
             var estadoCuenta = await _estadoCuentaRepository.GetEstadodeCuentaByTarjetaAndRangeDates(request.TarjetaId, request.FechaInicio, request.FechaFin);
 
             _logger.LogInformation("Se obtuvo satisfactoriamente el estado de cuenta para la tarjeta {tarjetaId} estado de cuenta {@EstadoCuenta}", request.TarjetaId, estadoCuenta);
+            return new BaseResponse<EstadosCuentaDto>(estadoCuenta);
+        }
+        catch (CreditCardNotFoundException ex)
+        {
+            _logger.LogError(ex.Message);
+            return new BaseResponse<EstadosCuentaDto>() { Message = ex.Message, Status = false };
+        }
+        catch (ClientNotFoundException ex)
+        {
+            _logger.LogError(ex.Message);
+            return new BaseResponse<EstadosCuentaDto>() { Message = ex.Message, Status = false };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return new BaseResponse<EstadosCuentaDto>() { Message = ex.Message, Status = false };
+        }
+    }
+    [HttpGet("GetEstadoCuentaOfThisMonth/{idTarjeta}")]
+    public async Task<BaseResponse<EstadosCuentaDto>> GetEstadoCuentaOfThisMonth( int idTarjeta)
+    {
+        try
+        {
+            _logger.LogInformation("Iniciando la obtención del estado de cuenta para la tarjeta {tarjetaId} ", idTarjeta);
+
+            var estadoCuenta = await _estadoCuentaRepository.GetEstadodeCuentaByTarjetaAndRangeDates(idTarjeta);
+
+            _logger.LogInformation("Se obtuvo satisfactoriamente el estado de cuenta para la tarjeta {tarjetaId} estado de cuenta {@EstadoCuenta}", idTarjeta, estadoCuenta);
             return new BaseResponse<EstadosCuentaDto>(estadoCuenta);
         }
         catch (CreditCardNotFoundException ex)

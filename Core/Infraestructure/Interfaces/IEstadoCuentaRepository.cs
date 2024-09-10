@@ -10,6 +10,7 @@ namespace Core.Infraestructure.Interfaces
     public interface IEstadoCuentaRepository
     {
 
-        Task<EstadosCuentaDto> GetEstadodeCuentaByTarjetaAndRangeDates(int? TarjetaId,DateTime fechaInicio,DateTime fechaFin);
+        Task<EstadosCuentaDto> GetEstadodeCuentaByTarjetaAndRangeDates(int? TarjetaId,DateTime? fechaInicio=null,DateTime? fechaFin=null);
+     
     }
 }

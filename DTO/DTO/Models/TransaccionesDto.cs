@@ -22,8 +22,10 @@ namespace DTO.DTO.Models
 
         public decimal Monto { get; set; }
 
-        public string TipoTransaccion { get; set; } = null!;
+        public string TipoTransaccionName { get; set; } = null!;
 
-       
+        public int? TipoTransaccion { get; set; } = null!;
+
+
     }
 }

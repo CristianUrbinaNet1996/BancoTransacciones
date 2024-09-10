@@ -1,0 +1,65 @@
+﻿@page "/EstadoDeCuenta"
+@model WebAppBcuentas.Areas.EstadoCuentas.Models.EstadoCuentaVM
+@{
+    ViewData["Title"] = "Estado de Cuenta";
+}
+
+<h1>Estado de Cuenta</h1>
+
+<div>
+    <h2>Tarjeta de Crédito</h2>
+    <p><strong>Nombre del titular:</strong> @Model.Cliente.Nombre @Model.Cliente.Apellido</p>
+    <p><strong>Número de Tarjeta:</strong> @Model.Tarjeta.NumeroTarjeta</p>
+    <p><strong>Saldo Actual:</strong> $@Model.Tarjeta.SaldoActual</p>
+    <p><strong>Límite de Crédito:</strong> $@Model.Tarjeta.LimiteCredito</p>
+    <p><strong>Saldo Disponible:</strong> $@Model.Tarjeta.SaldoDisponible</p>
+</div>
+
+<div>
+    <h2>Compras del Mes Actual</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Descripción</th>
+                <th>Monto</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var transaccion in Model.Transacciones)
+            {
+                <tr>
+                    <td>@transaccion.FechaTransaccion.ToShortDateString()</td>
+                    <td>@transaccion.Descripcion</td>
+                    <td>$@transaccion.Monto</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+  
+</div>
+
+<div>
+    <h2>Interés y Pagos</h2>
+    @{
+        var interesBonificable = Model.InteresBonificable;
+        var cuotaMinima = Model.PagoMinimo;
+        var montoTotalContadoConIntereses = Model.PagoContadoConInteres;
+    }
+
+    <p><strong>Interés Bonificable:</strong> $@interesBonificable</p>
+    <p><strong>Cuota mínima a pagar:</strong> $@cuotaMinima</p>
+    <p><strong>Monto total a pagar:</strong> $@Model.SaldoMesActual</p>
+    <p><strong>Monto total de contado con intereses:</strong> $@montoTotalContadoConIntereses</p>
+
+    <button class="btn btn-primary" onclick="exportarPDF()">Exportar a PDF</button>
+</div>
+
+@section Scripts {
+    <script>
+        function exportarPDF() {
+            // Lógica para exportar a PDF
+        }
+    </script>
+}

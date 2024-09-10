@@ -27,7 +27,9 @@ public partial class BcuentasContext : DbContext
 
     public virtual DbSet<Transaccione> Transacciones { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+    } 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Cliente>(entity =>
@@ -135,12 +137,11 @@ public partial class BcuentasContext : DbContext
                 .HasColumnType("datetime");
             entity.Property(e => e.Monto).HasColumnType("decimal(10, 2)");
             entity.Property(e => e.TarjetaId).HasColumnName("TarjetaID");
-            entity.Property(e => e.TipoTransaccion).HasMaxLength(50);
 
             entity.HasOne(d => d.Tarjeta).WithMany(p => p.Transacciones)
                 .HasForeignKey(d => d.TarjetaId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Transacciones_TarjetasCredito");
+                .HasConstraintName("FK__Transacci__Tarje__66603565");
         });
 
         OnModelCreatingPartial(modelBuilder);

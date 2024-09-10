@@ -15,7 +15,7 @@ public partial class Transaccione
 
     public decimal Monto { get; set; }
 
-    public string TipoTransaccion { get; set; } = null!;
+    public int? TipoTransaccion { get; set; }
 
     public virtual TarjetasCredito Tarjeta { get; set; } = null!;
 }

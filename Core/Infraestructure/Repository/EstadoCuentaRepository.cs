@@ -2,6 +2,7 @@
 using Core.Infraestructure.Exceptions;
 using Core.Infraestructure.Interfaces;
 using Core.Infraestructure.Models;
+using DTO.DTO.Enums;
 using DTO.DTO.Models;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,7 @@ namespace Core.Infraestructure.Repository
             _parametrosRepository = parametrosConfiguracion;
         }
         
-        public async Task<EstadosCuentaDto> GetEstadodeCuentaByTarjetaAndRangeDates(int? TarjetaId,DateTime fechaInicio,DateTime fechaFin)
+        public async Task<EstadosCuentaDto> GetEstadodeCuentaByTarjetaAndRangeDates(int? TarjetaId,DateTime? fechaInicio=null,DateTime? fechaFin = null)
         {
             // 1. Obtener la tarjeta de crédito
             var tarjeta = await _tarjetaRepository.Get(TarjetaId.Value);
@@ -46,15 +47,26 @@ namespace Core.Infraestructure.Repository
                 throw new ClientNotFoundException("Cliente no encontrado",tarjeta.ClienteId);   
             }
 
-            // 3. Obtener las transacciones en el rango de fechas (mes actual)
             var transacciones = await _transaccionesRepository.GetTransaccionesByIdTarjeta(TarjetaId.Value);
-            var transaccionesMesActual = transacciones
-                .Where(t => t.FechaTransaccion >= fechaInicio && t.FechaTransaccion <= fechaFin && t.TarjetaId == TarjetaId)
-                .ToList();
+
+            var transaccionesMesActual = new List<TransaccionesDTO>();
+            if (fechaInicio is null)
+            {
+                fechaInicio = DateTime.Now;
+                 transaccionesMesActual = transacciones
+             .Where(t => t.FechaTransaccion.Month == fechaInicio.Value.Month || t.FechaTransaccion.Month == fechaInicio.Value.Month-1)
+             .ToList();
+            }
+            else {
+                 transaccionesMesActual = transacciones
+             .Where(t => t.FechaTransaccion >= fechaInicio && t.FechaTransaccion <= fechaFin)
+             .ToList();
+            }
+         
 
             // 4. Calcular los totales
-            var saldoTotal = transaccionesMesActual.Sum(t => t.Monto);
-            var totalComprasMesActual = transaccionesMesActual.Sum(t => t.TipoTransaccion == "Compra" ? t.Monto : 0);
+            var saldoTotal = tarjeta.SaldoActual;
+            var totalComprasMesActual = transaccionesMesActual.Sum(t =>(TipoTransaccion.TipoTransacción) t.TipoTransaccion == TipoTransaccion.TipoTransacción.Compra ? t.Monto : 0);
 
             var parametros = await _parametrosRepository.GetById(tarjeta.Configuracion.Value);
 
@@ -70,18 +82,24 @@ namespace Core.Infraestructure.Repository
             var estadoCuentaDto = new EstadosCuentaDto
             {
                 TarjetaId = tarjeta.TarjetaId,
-                Cliente = $"{cliente.Nombre} {cliente.Apellido}",
-                Mes = fechaInicio.Month,
-                Anio = fechaInicio.Year,
+                Cliente = cliente,
+                Mes = fechaInicio.Value.Month,
+                Anio = fechaInicio.Value.Year,
                 SaldoMesAnterior = 0, // Aquí puedes ajustar para obtener el saldo del mes anterior si lo necesitas
                 SaldoMesActual = saldoTotal,
                 InteresBonificable = interesBonificable,
                 PagoMinimo = cuotaMinima,
                 PagoContadoConInteres = totalConIntereses,
-                FechaCreacion = DateTime.Now
+                FechaCreacion = DateTime.Now,
+                Transacciones=transaccionesMesActual.OrderByDescending(d=>d.FechaTransaccion).ToList(),
             };
 
             return estadoCuentaDto;
+        }
+
+        public Task<EstadosCuentaDto> GetEstadodeCuentaOfThisMontByTarjeta(int? TarjetaId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
