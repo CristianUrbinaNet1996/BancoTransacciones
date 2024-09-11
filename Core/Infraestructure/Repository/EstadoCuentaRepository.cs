@@ -83,10 +83,12 @@ namespace Core.Infraestructure.Repository
             {
                 TarjetaId = tarjeta.TarjetaId,
                 Cliente = cliente,
+                NumeroTarjeta=tarjeta.NumeroTarjeta,
                 Mes = fechaInicio.Value.Month,
                 Anio = fechaInicio.Value.Year,
-                SaldoMesAnterior = 0, // Aquí puedes ajustar para obtener el saldo del mes anterior si lo necesitas
+                SaldoMesAnterior = 0, 
                 SaldoMesActual = saldoTotal,
+                SaldoDisponible = tarjeta.SaldoDisponible,
                 InteresBonificable = interesBonificable,
                 PagoMinimo = cuotaMinima,
                 PagoContadoConInteres = totalConIntereses,

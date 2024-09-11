@@ -8,7 +8,7 @@ namespace WebAppBcuentas.Areas.EstadoCuentas.Models
 
         public int TarjetaId { get; set; }
 
-        public TarjetasCreditoDto Tarjeta {  get; set; }
+        public string NumeroTarjeta { get; set; } = null!;
 
         public ClienteDto Cliente { get; set; }
 
@@ -17,6 +17,7 @@ namespace WebAppBcuentas.Areas.EstadoCuentas.Models
         public int Anio { get; set; }
 
         public decimal SaldoMesAnterior { get; set; }
+        public decimal? SaldoDisponible { get; set; }
 
         public decimal SaldoMesActual { get; set; }
 

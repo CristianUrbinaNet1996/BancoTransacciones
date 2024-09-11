@@ -20,7 +20,7 @@ namespace WebAppBcuentas.Areas.EstadoCuentas.Services
         {
             var datos = new EstadosCuentaDto();
 
-            var resultado = await _httpClientFactory.ExcuteAPI<BaseResponse>("API", $"GetEstadoCuentaOfThisMonth/?idTarjeta={Id}", ApiService.GET, null);
+            var resultado = await _httpClientFactory.ExcuteAPI<BaseResponse>("API", $"EstadoCuenta/GetEstadoCuentaOfThisMonth/{Id}", ApiService.GET, null);
             datos = resultado.ToObjet<EstadosCuentaDto>();
 
             return _mapper.Map<EstadoCuentaVM>(datos);

@@ -1,1 +1,259 @@
-﻿<h3>Hola Mundo</h3>
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estado de Cuenta</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background-color: #f7f9fc;
+            color: #333;
+            font-family: 'Arial', sans-serif;
+        }
+        /* Estilos para el menú lateral */
+        .sidebar {
+            height: 100vh;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #343a40;
+            padding-top: 20px;
+            transition: width 0.3s;
+        }
+
+            .sidebar.collapsed {
+                width: 80px;
+            }
+
+            .sidebar a {
+                padding: 15px;
+                font-size: 18px;
+                color: white;
+                display: block;
+                text-decoration: none;
+                transition: all 0.3s;
+                white-space: nowrap;
+            }
+
+            .sidebar.collapsed a {
+                text-align: center;
+                font-size: 0;
+                padding: 15px 0;
+            }
+
+                .sidebar.collapsed a i {
+                    font-size: 24px;
+                }
+
+            .sidebar a:hover {
+                background-color: #007bff;
+                color: white;
+            }
+
+        .main-content {
+            margin-left: 260px;
+            padding: 20px;
+            transition: margin-left 0.3s;
+        }
+
+        .collapsed + .main-content {
+            margin-left: 90px;
+        }
+        /* Botón de hamburguesa */
+        .menu-toggle {
+            background-color: #343a40;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            left: 250px;
+            transition: left 0.3s;
+        }
+
+        .collapsed + .menu-toggle {
+            left: 80px;
+        }
+        /* Iconos */
+        .fa {
+            margin-right: 10px;
+        }
+
+        .sidebar.collapsed .fa {
+            margin-right: 0;
+        }
+
+        .card {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .header-card {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .table th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .table tbody tr:nth-child(odd) {
+            background-color: #f2f2f2;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+            }
+
+        .text-balance {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .text-debt {
+            color: #dc3543;
+            font-weight: bold;
+        }
+
+        .text-danger {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <!-- Menú lateral con iconos -->
+    <div class="sidebar" id="sidebar">
+        <a href="#agregarPago" onclick="agregarPago()">
+            <i class="fas fa-money-bill-wave"></i>
+            <span>Agregar Pago</span>
+        </a>
+        <a href="#agregarCompra" onclick="agregarCompra()">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Agregar Compra</span>
+        </a>
+        <a href="#verTransacciones" onclick="verTransacciones()">
+            <i class="fas fa-list"></i>
+            <span>Ver Transacciones</span>
+        </a>
+    </div>
+
+    <!-- Botón de menú hamburguesa -->
+    <button class="menu-toggle" id="menu-toggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Contenido principal -->
+    <div class="main-content" id="main-content">
+        <div class="container">
+            <!-- Encabezado del Estado de Cuenta -->
+            <div class="card">
+                <div class="header-card">
+                    <h1 class="text-center">Estado de Cuenta</h1>
+                </div>
+                <div class="card-body">
+                    <!-- Información del titular y tarjeta -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>Información del Titular</h4>
+                            <p><strong>Nombre:</strong> @Model.Cliente.Nombre @Model.Cliente.Apellido</p>
+                            <p><strong>Número de Tarjeta:</strong> **** **** **** @Model.NumeroTarjeta.Substring(12, 4)</p>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <h4>Saldo</h4>
+                            <p><strong>Saldo Actual:</strong> <span class="text-debt">$@Model.SaldoMesActual</span></p>
+                            <p><strong>Saldo Disponible:</strong> <span class="text-balance">$@Model.SaldoDisponible</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Compras del mes -->
+            <div class="card mt-4">
+                <div class="header-card">
+                    <h2 class="text-center">Compras del Mes</h2>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Descripción</th>
+                                <th>Monto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var transaccion in Model.Transacciones)
+                            {
+                                <tr>
+                                    <td>@transaccion.FechaTransaccion.ToShortDateString()</td>
+                                    <td>@transaccion.Descripcion</td>
+                                    <td class="@((transaccion.Monto < 0) ? "text-danger" : "")">$@transaccion.Monto</td>
+                                </tr>
+                            }
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Intereses y Pagos -->
+            <div class="card mt-4">
+                <div class="header-card">
+                    <h2 class="text-center">Intereses y Pagos</h2>
+                </div>
+                <div class="card-body">
+                    <p><strong>Interés Bonificable:</strong> $@Model.InteresBonificable</p>
+                    <p><strong>Cuota Mínima a Pagar:</strong> $@Model.PagoMinimo</p>
+                    <p><strong>Monto Total a Pagar:</strong> $@Model.SaldoMesActual</p>
+                    <p><strong>Monto Total de Contado con Intereses:</strong> $@Model.PagoContadoConInteres</p>
+                    <div class="text-center mt-3">
+                        <button class="btn btn-primary" onclick="exportarPDF()">Exportar a PDF</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Funciones para menú lateral
+            function agregarPago() {
+                alert('Abrir formulario para agregar pago');
+            }
+
+            function agregarCompra() {
+                alert('Abrir formulario para agregar compra');
+            }
+
+            function verTransacciones() {
+                alert('Mostrar lista de transacciones');
+            }
+
+            // Función para exportar a PDF
+            function exportarPDF() {
+                alert('Exportando a PDF...');
+            }
+
+            // Función para colapsar/expandir el menú lateral
+            const sidebar = document.getElementById('sidebar');
+            const toggleButton = document.getElementById('menu-toggle');
+            const mainContent = document.getElementById('main-content');
+
+            toggleButton.addEventListener('click', function () {
+                sidebar.classList.toggle('collapsed');
+                mainContent.classList.toggle('collapsed');
+            });
+        </script>
+</body>
+</html>

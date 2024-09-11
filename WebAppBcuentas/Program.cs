@@ -18,6 +18,8 @@ builder.Services.AddHttpClient("API", c =>
     c.DefaultRequestHeaders.Add("Accept", "application/json");
 });
 
+builder.Services.AddMvc().AddRazorRuntimeCompilation();
+builder.Services.AddMvcCore().AddRazorRuntimeCompilation();
 
 var app = builder.Build();
 

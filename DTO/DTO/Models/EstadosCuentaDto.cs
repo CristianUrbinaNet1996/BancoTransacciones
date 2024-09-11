@@ -13,7 +13,9 @@ namespace DTO.DTO.Models
 
         public int TarjetaId { get; set; }
 
-       public ClienteDto Cliente { get; set; }
+        public string NumeroTarjeta { get; set; } = null!;
+
+        public ClienteDto Cliente { get; set; }
 
         public int Mes { get; set; }
 
@@ -22,6 +24,8 @@ namespace DTO.DTO.Models
         public decimal SaldoMesAnterior { get; set; }
 
         public decimal SaldoMesActual { get; set; }
+
+        public decimal? SaldoDisponible { get; set; }
 
         public decimal InteresBonificable { get; set; }
 

@@ -5,12 +5,12 @@ namespace WebAppBcuentas.Models
     public class BaseResponse
     {
 
-            public int Id { get; set; }
-            public int Code { get; set; }
-            public object Data { get; set; }
-            public string Message { get; set; }
-
-            public T ToObjet<T>()
+        public bool? status { get; set; }
+        public string? Message { get; set; }
+        public string? DebugMessage { get; set; }
+        public string? MapId { get; set; }
+        public object? Data { get; set; }
+        public T ToObjet<T>()
             {
                 var jsonSerializerSettings = new JsonSerializerSettings
                 {

@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BCuentas</name>
+    </assembly>
+    <members>
+        <member name="M:BCuentas.Controllers.TransaccionesController.Get(System.Int32)">
+             <summary>
+             Obtiene las transacciones de la tarjeta.
+             </summary>
+             <remarks>
+             Este endpoint permite obtener las transacciones de  una tarjeta a partir de su id.
+             
+             <para>Header:</para>
+             <para>Authorization: JWT Firebase Auth</para>
+             
+             <para>En el campo 'id', se debe proporcionar un ID válido de tarjeta.</para>
+            
+             </remarks>
+             <param name="id">id de la tarjeta  para la consulta.</param>
+             <returns>Un objeto BaseResponse que contiene los datos del estado de cuenta o un mensaje de error si no se encuentra.</returns>
+             <response code="200">Devuelve las transacciones de la tarjeta solicitado.</response>
+             <response code="400">Devuelve un mensaje de error si los parámetros son inválidos.</response>
+             <response code="404">Devuelve un mensaje de error si la tarjeta no se encuentra.</response>
+        </member>
+        <member name="M:BCuentas.Controllers.TransaccionesController.Post(DTO.DTO.Request.CreateTransaccionRequestDto)">
+             <summary>
+             Creacion de transacciones de cualquier tipo.
+             </summary>
+             <remarks>
+             Este endpoint permite crear las transacciones de una tarjeta.
+             
+             <para>Header:</para>
+             <para>Authorization: JWT Firebase Auth</para>
+             
+            
+             </remarks>
+             <param name="transacciones">Contiene el modelo request para crear la transaccion</param>
+             <returns>Un objeto BaseResponse que contiene los datos de la transaccion que se acaba de crear</returns>
+             <response code="200">Devuelve la transacción creada.</response>
+             <response code="400">Devuelve un mensaje de error si los parámetros son inválidos.</response>
+             <response code="404">Devuelve un mensaje de error si la tarjeta no se encuentra.</response>
+        </member>
+        <member name="M:EstadoCuentaController.GetEstadoCuentaByRangeDates(DTO.DTO.Request.EstadoCuentaRequestDto)">
+            <summary>
+            Obtiene el estado de cuenta para una tarjeta en un rango de fechas específico.
+            </summary>
+            <remarks>
+            Este endpoint permite obtener el estado de cuenta asociado a una tarjeta, especificando un rango de fechas.
+            
+            <para>Header:</para>
+            <para>Authorization: JWT Firebase Auth</para>
+            
+            <para>En el campo 'TarjetaId', se debe proporcionar un ID válido de tarjeta.</para>
+            <para>Las fechas deben estar en formato ISO 8601.</para>
+            </remarks>
+            <param name="request">Objeto que contiene la tarjeta, fecha de inicio y fecha de fin para la consulta.</param>
+            <returns>Un objeto BaseResponse que contiene los datos del estado de cuenta o un mensaje de error si no se encuentra.</returns>
+            <response code="200">Devuelve el estado de cuenta solicitado.</response>
+            <response code="400">Devuelve un mensaje de error si los parámetros son inválidos.</response>
+            <response code="404">Devuelve un mensaje de error si la tarjeta no se encuentra.</response>
+        </member>
+    </members>
+</doc>
