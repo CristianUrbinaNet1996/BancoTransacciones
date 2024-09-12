@@ -18,12 +18,16 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes = true
 build_property.MSBuildProjectDirectory = C:\Banco\WebAppBcuentas
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Banco/WebAppBcuentas/Areas/EstadoCuenta/Views/EstadoCuenta/GetEstadoCuenta.cshtml]
-build_metadata.AdditionalFiles.TargetPath = QXJlYXNcRXN0YWRvQ3VlbnRhXFZpZXdzXEVzdGFkb0N1ZW50YVxHZXRFc3RhZG9DdWVudGEuY3NodG1s
+[C:/Banco/WebAppBcuentas/Areas/EstadoCuenta/Views/EstadoCuenta/AgregarTransaccion.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcRXN0YWRvQ3VlbnRhXFZpZXdzXEVzdGFkb0N1ZW50YVxBZ3JlZ2FyVHJhbnNhY2Npb24uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Banco/WebAppBcuentas/Areas/EstadoCuenta/Views/EstadoCuenta/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcRXN0YWRvQ3VlbnRhXFZpZXdzXEVzdGFkb0N1ZW50YVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Banco/WebAppBcuentas/Areas/EstadoCuenta/Views/EstadoCuenta/PDFEstadoCuenta.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcRXN0YWRvQ3VlbnRhXFZpZXdzXEVzdGFkb0N1ZW50YVxQREZFc3RhZG9DdWVudGEuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Banco/WebAppBcuentas/Views/Home/Index.cshtml]

@@ -355,3 +355,15 @@ C:\Banco\WebAppBcuentas\bin\Debug\net6.0\tr\Microsoft.CodeAnalysis.CSharp.resour
 C:\Banco\WebAppBcuentas\bin\Debug\net6.0\zh-Hans\Microsoft.CodeAnalysis.CSharp.resources.dll
 C:\Banco\WebAppBcuentas\bin\Debug\net6.0\zh-Hant\Microsoft.CodeAnalysis.CSharp.resources.dll
 C:\Banco\WebAppBcuentas\obj\Debug\net6.0\WebAppBcuentas.MvcApplicationPartsAssemblyInfo.cs
+C:\Banco\WebAppBcuentas\bin\Debug\net6.0\BouncyCastle.Cryptography.dll
+C:\Banco\WebAppBcuentas\bin\Debug\net6.0\itextsharp.dll
+C:\Banco\WebAppBcuentas\bin\Debug\net6.0\System.Web.Mvc.dll
+C:\Banco\WebAppBcuentas\bin\Debug\net6.0\System.Web.Razor.dll
+C:\Banco\WebAppBcuentas\bin\Debug\net6.0\System.Web.Helpers.dll
+C:\Banco\WebAppBcuentas\bin\Debug\net6.0\System.Web.WebPages.Deployment.dll
+C:\Banco\WebAppBcuentas\bin\Debug\net6.0\System.Web.WebPages.Razor.dll
+C:\Banco\WebAppBcuentas\bin\Debug\net6.0\System.Web.WebPages.dll
+C:\Banco\WebAppBcuentas\bin\Debug\net6.0\Microsoft.Web.Infrastructure.dll
+C:\Banco\WebAppBcuentas\bin\Debug\net6.0\DinkToPdf.dll
+C:\Banco\WebAppBcuentas\bin\Debug\net6.0\ClientDependency.Core.dll
+C:\Banco\WebAppBcuentas\bin\Debug\net6.0\itextsharp.xmlworker.dll

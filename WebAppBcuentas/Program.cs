@@ -1,3 +1,5 @@
+using DinkToPdf.Contracts;
+using DinkToPdf;
 using Microsoft.Extensions.Configuration;
 using WebAppBcuentas.Areas.EstadoCuentas.Interfaces;
 using WebAppBcuentas.Areas.EstadoCuentas.Services;
@@ -6,10 +8,13 @@ using WebAppBcuentas.Automapper;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddSessionStateTempDataProvider();  // Agregar soporte para TempData
+
 builder.Services.AddScoped<IEstadoCuenta, SEstadoCuentas>();
 
 builder.Services.AddAutoMapper(typeof(CoreMapper));
+builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
 
 builder.Services.AddHttpClient("API", c =>
@@ -20,6 +25,16 @@ builder.Services.AddHttpClient("API", c =>
 
 builder.Services.AddMvc().AddRazorRuntimeCompilation();
 builder.Services.AddMvcCore().AddRazorRuntimeCompilation();
+
+builder.Services.AddMvc()
+    .AddRazorOptions(options =>
+    {
+        // Añade o asegúrate de que las rutas a las áreas estén configuradas
+        options.AreaViewLocationFormats.Clear();
+        options.AreaViewLocationFormats.Add("/Areas/{2}/Views/{1}/{0}.cshtml");
+        options.AreaViewLocationFormats.Add("/Areas/{2}/Views/Shared/{0}.cshtml");
+        options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
+    });
 
 var app = builder.Build();
 

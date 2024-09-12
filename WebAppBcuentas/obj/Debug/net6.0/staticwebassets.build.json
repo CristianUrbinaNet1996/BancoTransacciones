@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "zwl/NDopctuv8lNt/+kWwYm6Bgcp/Cd6UAoW7gPFwuY=",
+  "Hash": "4gwqpciLO4M8a0QlSq13cXtCBwdHNn+pv+MnI++T3WM=",
   "Source": "WebAppBcuentas",
   "BasePath": "_content/WebAppBcuentas",
   "Mode": "Default",
@@ -72,6 +72,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\site.css"
+    },
+    {
+      "Identity": "C:\\Banco\\WebAppBcuentas\\wwwroot\\css\\Styles.css",
+      "SourceId": "WebAppBcuentas",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Banco\\WebAppBcuentas\\wwwroot\\",
+      "BasePath": "_content/WebAppBcuentas",
+      "RelativePath": "css/Styles.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\Styles.css"
     },
     {
       "Identity": "C:\\Banco\\WebAppBcuentas\\wwwroot\\favicon.ico",

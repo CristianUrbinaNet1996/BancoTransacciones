@@ -1,0 +1,72 @@
+﻿<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<div class="container">
+    <!-- Encabezado del Estado de Cuenta -->
+    <div class="card">
+        <div class="header-card">
+            <h1 class="text-center">Estado de Cuenta</h1>
+        </div>
+        <div class="card-body">
+            <!-- Información del titular y tarjeta -->
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Información del Titular</h4>
+                    <p><strong>Nombre:</strong> @Model.Cliente.Nombre @Model.Cliente.Apellido</p>
+                    <p><strong>Número de Tarjeta:</strong> **** **** **** @Model.NumeroTarjeta.Substring(12, 4)</p>
+                </div>
+                <div class="col-md-6 text-right">
+                    <h4>Saldo</h4>
+                    <p><strong>Saldo Actual:</strong> <span class="text-debt">$@Model.SaldoMesActual</span></p>
+                    <p><strong>Saldo Disponible:</strong> <span class="text-balance">$@Model.SaldoDisponible</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Intereses y Pagos -->
+    <div class="card mt-4">
+        <div class="header-card">
+            <h2 class="text-center">Intereses y Pagos</h2>
+        </div>
+        <div class="card-body">
+            <p><strong>Interés Bonificable:</strong> $@Model.InteresBonificable</p>
+            <p><strong>Cuota Mínima a Pagar:</strong> $@Model.PagoMinimo</p>
+            <p><strong>Monto Total a Pagar:</strong> $@Model.SaldoMesActual</p>
+            <p><strong>Monto Total de Contado con Intereses:</strong> $@Model.PagoContadoConInteres</p>
+            <div class="text-center mt-3">
+                <button class="btn btn-primary" onclick="exportarPDF()">Exportar a PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Compras del mes -->
+    <div class="card mt-4">
+        <div class="header-card">
+            <h2 class="text-center">Compras del Mes</h2>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Descripción</th>
+                        <th>Monto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var transaccion in Model.Transacciones)
+                    {
+                        <tr>
+                            <td>@transaccion.FechaTransaccion.ToShortDateString()</td>
+                            <td>@transaccion.Descripcion</td>
+                            <td class="@((transaccion.Monto < 0) ? "text-danger" : "")">$@transaccion.Monto</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+</div>

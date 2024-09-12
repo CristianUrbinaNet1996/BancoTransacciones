@@ -15,7 +15,7 @@ namespace WebAppBcuentas.Models.Dto
         public string NumeroTarjeta { get; set; } = null!;
         public decimal? SaldoDisponible { get; set; }
         public ClienteDto Cliente { get; set; }
-
+        public string ClienteNombre { get; set; }
         public int Mes { get; set; }
 
         public int Anio { get; set; }

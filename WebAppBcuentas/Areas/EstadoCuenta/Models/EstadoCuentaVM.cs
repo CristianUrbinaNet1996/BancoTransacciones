@@ -12,6 +12,7 @@ namespace WebAppBcuentas.Areas.EstadoCuentas.Models
 
         public ClienteDto Cliente { get; set; }
 
+        public string ClienteNombre { get; set; }
         public int Mes { get; set; }
 
         public int Anio { get; set; }
