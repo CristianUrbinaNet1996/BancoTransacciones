@@ -4,6 +4,13 @@ using Microsoft.Extensions.Configuration;
 using WebAppBcuentas.Areas.EstadoCuentas.Interfaces;
 using WebAppBcuentas.Areas.EstadoCuentas.Services;
 using WebAppBcuentas.Automapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using WebAppBcuentas.Areas.Transacciones.Interface;
+using WebAppBcuentas.Areas.Transacciones.Services;
+using WebAppBcuentas.Areas.Cliente.Interfaces;
+using WebAppBcuentas.Areas.Cliente.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,10 +19,33 @@ builder.Services.AddControllersWithViews()
     .AddSessionStateTempDataProvider();  // Agregar soporte para TempData
 
 builder.Services.AddScoped<IEstadoCuenta, SEstadoCuentas>();
+builder.Services.AddScoped<ITransaccion,STransaccion>();
+builder.Services.AddScoped<ICliente, SCliente>();
 
 builder.Services.AddAutoMapper(typeof(CoreMapper));
 builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
+
+builder.Services.AddAuthentication(options =>
+{
+options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+    .AddJwtBearer(options =>
+    {
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = "tu_issuer", // Cambia esto por tu emisor
+        ValidAudience = "tu_audience", // Cambia esto por tu audiencia
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("tu_clave_secreta")) // Llave secreta
+    };
+    
+
+});
 
 builder.Services.AddHttpClient("API", c =>
 {
@@ -51,24 +81,25 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
+app.UseAuthentication();
+//app.UseAuthorization();
 
 // Configurar uso de áreas (si usas áreas)
-app.UseRouting();
 
 app.UseEndpoints(endpoints =>
 {
-    // Ruta específica para el área 'EstadoCuenta'
     endpoints.MapAreaControllerRoute(
-        name: "estado_cuenta_route",
-        areaName: "EstadoCuenta",
-        pattern: "EstadoCuenta/{controller=EstadoCuenta}/{action=GetEstadoCuenta}/{idTarjeta?}");
-
-    // Ruta predeterminada
+     name: "area",
+     areaName:"EstadoCuenta",
+     pattern: "{controller=EstadoCuenta}/{action=Index}/{id?}"
+   );
     endpoints.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");
+      name: "area",
+      pattern: "{area:exists}/{controller=EstadoCuenta}/{action=Index}/{id?}"
+    );
+  
 });
 
+app.MapRazorPages();
 
 app.Run();

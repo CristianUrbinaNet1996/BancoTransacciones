@@ -10,7 +10,7 @@
 
             public const string FondosInsuficientes = "Compra rechazada, fondos insuficientes en la tarjeta {0}";
 
-
+            public const string CredencialesIncorrectas = "Email o contraseña incorrecta";
         }
     }
 }

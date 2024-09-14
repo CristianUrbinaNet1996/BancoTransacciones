@@ -28,6 +28,8 @@ namespace WebAppBcuentas.Areas.EstadoCuentas.Controllers
 {
     [Area("EstadoCuenta")]
     public class EstadoCuentaController : Controller
+
+
     {
         private readonly ICompositeViewEngine _viewEnginee;
         private readonly IEstadoCuenta _estadoCuenta;
@@ -56,13 +58,7 @@ namespace WebAppBcuentas.Areas.EstadoCuentas.Controllers
         }
 
 
-        public async Task<IActionResult> AgregarTransaccion() {  
-        
-        
-            return View();  
-        
-        }  
-
+       
         [HttpGet("GetEstadoCuenta/{idTarjeta}")]
         public async Task<IActionResult> GetEstadoCuenta(int idTarjeta)
         {

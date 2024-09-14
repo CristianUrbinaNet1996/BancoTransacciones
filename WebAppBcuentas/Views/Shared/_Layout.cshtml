@@ -7,6 +7,18 @@
     <!-- Dependencias Bootstrap y FontAwesome -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="~/js/jquery-3.6.0.js"></script>
+
+    <script src="~/js/jquery-3.6.0.js"></script>
+    <link href="~/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/font-awesome/css/fontawesome.css" rel="stylesheet">
+    <link href="~/css/all.css" rel="stylesheet" />
+    <link href="~/css/animate.css" rel="stylesheet">
+    <link href="~/css/style.css" rel="stylesheet">
+    <link href="~/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
+    <link href="~/css/plugins/summernote/summernote-bs4.css" rel="stylesheet">
+    <link href="~/css/plugins/blueimp/css/blueimp-gallery.css" rel="stylesheet" />
+    <link href="~/css/plugins/datapicker/datepicker3.css" rel="stylesheet" />
     <style>
         body {
             background-color: #f7f9fc;
@@ -109,19 +121,28 @@
             border-radius: 10px 10px 0 0;
         }
     </style>
+  
+
+    <script src="~/js/popper.min.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="~/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+
+
 </head>
 <body>
     <!-- Menú lateral con iconos -->
     <div class="sidebar" id="sidebar">
-        <a href="@Url.Action("AgregarTransaccion", "EstadoCuenta",new {Area="EstadoCuenta"})">
+        <a href="@Url.Action("AgregarTransaccion", "Transacciones",new {Area="Transacciones"})">
             <i class="fas fa-money-bill-wave"></i>
-            <span>Agregar Trnasaccion</span>
+            <span>Agregar Transaccion</span>
         </a>
         <a href="@Url.Action("Index", "EstadoCuenta",new {Area="EstadoCuenta"})">
             <i class="fas fa-shopping-cart"></i>
             <span>Estado de cuenta</span>
         </a>
-        <a href="@Url.Action("VerTransacciones", "Transacciones")">
+        <a href="@Url.Action("GetTransaccionesByIdTarjeta", "Transacciones", new {idTarjeta=1,Area="Transacciones"})">
             <i class="fas fa-list"></i>
             <span>Ver Transacciones</span>
         </a>
@@ -148,5 +169,15 @@
             mainContent.classList.toggle('collapsed');
         });
     </script>
+    <!-- Custom and plugin javascript -->
+    <script src="~/js/inspinia.js"></script>
+    <script src="~/js/plugins/pace/pace.min.js"></script>
+    <script src="~/js/plugins/summernote/summernote-bs4.js"></script>
+    <script src="~/js/plugins/datapicker/bootstrap-datepicker.js"></script>
+    <script src="~/js/funciones/formularios.js"></script>
+    <script src="~/js/plugins/dataTables/datatables.min.js"></script>
+    <script src="~/js/plugins/datatables/datatables-input.js"></script>
+    <script src="~/js/funciones/validaciones.js"></script>
+    @RenderSection("scripts", false);
 </body>
 </html>

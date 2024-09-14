@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Core.Infraestructure.DTO.Models;
 using Core.Infraestructure.Models;
+using Core.Infraestructure.Utils;
 using DTO.DTO.Enums;
 using DTO.DTO.Models;
 using DTO.DTO.Request;
@@ -34,6 +35,8 @@ namespace Core.Infraestructure.Automapper
             CreateMap<ParametrosConfiguracion, ParametrosConfiguracionDto>();
 
             CreateMap<CreateTransaccionRequestDto, Transaccione>();
+
+            CreateMap<sp_login, ClienteDto>().ReverseMap();
         }
     }
 }

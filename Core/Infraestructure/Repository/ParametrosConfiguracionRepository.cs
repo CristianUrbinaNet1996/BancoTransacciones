@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Core.Infraestructure.Repository
 {
-    public class ParametrosConfiguracionRepository:IParametrosConfiguracion
+    public class ParametrosConfiguracionRepository:IParametrosConfiguracionRepository
     {
         private BcuentasContext _context;
         private IMapper _mapper;

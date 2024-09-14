@@ -1,6 +1,6 @@
 ﻿@{
     ViewBag.Title = "Estado de Cuenta";
-    //Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container">
@@ -37,7 +37,7 @@
             <p><strong>Monto Total a Pagar:</strong> $@Model.SaldoMesActual</p>
             <p><strong>Monto Total de Contado con Intereses:</strong> $@Model.PagoContadoConInteres</p>
             <div class="text-center mt-3">
-                <button class="btn btn-primary" onclick="exportarPDF()">Exportar a PDF</button>
+                <button id="exportPdfBtn" class="btn btn-primary"> Exportar Estado de Cuenta a PDF </button>
             </div>
         </div>
     </div>
@@ -75,87 +75,30 @@
 
 <script>
     // Función para exportar a PDF
-    function exportarPDF() {
-        alert('Exportando a PDF...');
-    }
-</script>@{
-    ViewBag.Title = "Estado de Cuenta";
-    //Layout = "~/Views/Shared/_Layout.cshtml";
-}
+   
 
-<div class="container">
-    <!-- Encabezado del Estado de Cuenta -->
-    <div class="card">
-        <div class="header-card">
-            <h1 class="text-center">Estado de Cuenta</h1>
-        </div>
-        <div class="card-body">
-            <!-- Información del titular y tarjeta -->
-            <div class="row">
-                <div class="col-md-6">
-                    <h4>Información del Titular</h4>
-                    <p><strong>Nombre:</strong> @Model.Cliente.Nombre @Model.Cliente.Apellido</p>
-                    <p><strong>Número de Tarjeta:</strong> **** **** **** @Model.NumeroTarjeta.Substring(12, 4)</p>
-                </div>
-                <div class="col-md-6 text-right">
-                    <h4>Saldo</h4>
-                    <p><strong>Saldo Actual:</strong> <span class="text-debt">$@Model.SaldoMesActual</span></p>
-                    <p><strong>Saldo Disponible:</strong> <span class="text-balance">$@Model.SaldoDisponible</span></p>
-                </div>
-            </div>
-        </div>
-    </div>
+       
+    document.getElementById("exportPdfBtn").addEventListener("click", function () {
+            const idTarjeta = @Model.TarjetaId; // Asumiendo que tienes el idTarjeta en el modelo.
 
-    <!-- Intereses y Pagos -->
-    <div class="card mt-4">
-        <div class="header-card">
-            <h2 class="text-center">Intereses y Pagos</h2>
-        </div>
-        <div class="card-body">
-            <p><strong>Interés Bonificable:</strong> $@Model.InteresBonificable</p>
-            <p><strong>Cuota Mínima a Pagar:</strong> $@Model.PagoMinimo</p>
-            <p><strong>Monto Total a Pagar:</strong> $@Model.SaldoMesActual</p>
-            <p><strong>Monto Total de Contado con Intereses:</strong> $@Model.PagoContadoConInteres</p>
-            <div class="text-center mt-3">
-                <button class="btn btn-primary" onclick="exportarPDF()">Exportar a PDF</button>
-            </div>
-        </div>
-    </div>
+        fetch(`EstadoCuenta/EstadoCuenta/ExportEstadoDeCuentaToPdf?idTarjeta=${idTarjeta}`, {
+            method: 'GET',
+        })
+            .then(response => response.blob())
+            .then(blob => {
+                // Crear un enlace para descargar el archivo PDF
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'EstadoDeCuenta.pdf';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            })
+            .catch(error => {
+                console.error('Error al generar el PDF:', error);
+            });
+    });
+</script>
 
-    <!-- Compras del mes -->
-    <div class="card mt-4">
-        <div class="header-card">
-            <h2 class="text-center">Compras del Mes</h2>
-        </div>
-        <div class="card-body">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Fecha</th>
-                        <th>Descripción</th>
-                        <th>Monto</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var transaccion in Model.Transacciones)
-                    {
-                        <tr>
-                            <td>@transaccion.FechaTransaccion.ToShortDateString()</td>
-                            <td>@transaccion.Descripcion</td>
-                            <td class="@((transaccion.Monto < 0) ? "text-danger" : "")">$@transaccion.Monto</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-  
-</div>
-
-<script>
-    // Función para exportar a PDF
-    function exportarPDF() {
-        alert('Exportando a PDF...');
-    }
 </script>

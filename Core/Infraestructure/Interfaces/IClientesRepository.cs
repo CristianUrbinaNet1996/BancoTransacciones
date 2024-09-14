@@ -11,5 +11,6 @@ namespace Core.Infraestructure.Interfaces
     {
 
         Task<ClienteDto>  GetClienteById(int id);
+        Task<List<ClienteDto>> GetClientes();
     }
 }

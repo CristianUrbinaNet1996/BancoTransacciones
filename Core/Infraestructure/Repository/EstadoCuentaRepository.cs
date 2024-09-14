@@ -18,9 +18,9 @@ namespace Core.Infraestructure.Repository
         private ITarjetaRepository _tarjetaRepository;
         private IClientesRepository _clientesRepository;
         private ITransaccionesRepository _transaccionesRepository;
-        private IParametrosConfiguracion _parametrosRepository;
+        private IParametrosConfiguracionRepository _parametrosRepository;
         private IMapper _mapper;
-        public EstadoCuentaRepository(BcuentasContext context, IClientesRepository clientesRepository, IParametrosConfiguracion parametrosConfiguracion, ITarjetaRepository tarjetaRepository, IMapper mapper, ITransaccionesRepository transaccionesRepository)
+        public EstadoCuentaRepository(BcuentasContext context, IClientesRepository clientesRepository, IParametrosConfiguracionRepository parametrosConfiguracion, ITarjetaRepository tarjetaRepository, IMapper mapper, ITransaccionesRepository transaccionesRepository)
         {
 
             _context = context;

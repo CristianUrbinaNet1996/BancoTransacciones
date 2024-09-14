@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Core.Infraestructure.Utils;
+using DTO.DTO.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Core.Infraestructure.Models;
@@ -26,10 +28,9 @@ public partial class BcuentasContext : DbContext
     public virtual DbSet<TarjetasCredito> TarjetasCreditos { get; set; }
 
     public virtual DbSet<Transaccione> Transacciones { get; set; }
+    public virtual DbSet<sp_login> sp_LoginResult {  get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-    } 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Cliente>(entity =>

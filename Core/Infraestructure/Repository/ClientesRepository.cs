@@ -2,6 +2,7 @@
 using Core.Infraestructure.DTO.Models;
 using Core.Infraestructure.Interfaces;
 using Core.Infraestructure.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,11 @@ namespace Core.Infraestructure.Repository
         {
           var cliente = await _context.Clientes.FindAsync(id);
             return _mapper.Map<ClienteDto>(cliente);    
+        }
+        public async Task<List<ClienteDto>> GetClientes()
+        {
+            var cliente = await _context.Clientes.ToListAsync();
+            return _mapper.Map<List<ClienteDto>>(cliente);
         }
     }
 }

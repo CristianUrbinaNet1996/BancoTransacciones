@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Core.Infraestructure.DTO;
+using Core.Infraestructure.DTO.Models;
+using Core.Infraestructure.Exceptions;
+using Core.Infraestructure.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,11 +13,43 @@ namespace BCuentas.Controllers
     [ApiController]
     public class ClientesController : ControllerBase
     {
-        // GET: api/<ClientesController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly IMapper _mapper;
+        private readonly IClientesRepository _clienteRepo;
+
+
+        private ILogger<EstadoCuentaController> _logger;
+        public ClientesController(IClientesRepository clientesRepository, IMapper mapper, ILogger<EstadoCuentaController> logger)
         {
-            return new string[] { "value1", "value2" };
+            _clienteRepo = clientesRepository;
+            _mapper = mapper;
+            _logger = logger;
+        }
+        [HttpGet("GetAll")]
+        public async Task<BaseResponse<List<ClienteDto>>> GetAll()
+        {
+            _logger.LogInformation("Iniciando obtencion de clientes");
+
+            try
+            {
+                var result = await _clienteRepo.GetClientes();
+                return new BaseResponse<List<ClienteDto>>(result);
+            }
+            catch (WrongCredentialsException ex)
+            {
+
+                _logger.LogError(ex.Message);
+                return new BaseResponse<List<ClienteDto>>() { Message = ex.Message, Status = false };
+
+            }
+
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex.Message);
+                return new BaseResponse<List<ClienteDto>>() { Message = ex.Message, Status = false };
+
+            }
+
         }
 
         // GET api/<ClientesController>/5

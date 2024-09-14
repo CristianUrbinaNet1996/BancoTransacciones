@@ -58,8 +58,9 @@ builder.Services.AddScoped(typeof(IUnitOfWork<>), typeof(UnitOfWorkRepository<>)
 builder.Services.AddScoped<IClientesRepository, ClientesRepository>();
 builder.Services.AddScoped<ITarjetaRepository, TarjetasRepository>();
 builder.Services.AddScoped<IEstadoCuentaRepository, EstadoCuentaRepository>();
-builder.Services.AddScoped<IParametrosConfiguracion, ParametrosConfiguracionRepository>();
+builder.Services.AddScoped<IParametrosConfiguracionRepository, ParametrosConfiguracionRepository>();
 builder.Services.AddScoped<ITransaccionesRepository, TransaccionesRepository>();
+builder.Services.AddScoped<ILoginRepository, LoginRepository>();    
 
 // Configura Serilog desde appsettings.json
 try

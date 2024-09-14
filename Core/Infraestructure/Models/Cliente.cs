@@ -21,5 +21,7 @@ public partial class Cliente
 
     public DateTime? FechaCreacion { get; set; }
 
+    public string? Password { get; set; }
+
     public virtual ICollection<TarjetasCredito> TarjetasCreditos { get; } = new List<TarjetasCredito>();
 }

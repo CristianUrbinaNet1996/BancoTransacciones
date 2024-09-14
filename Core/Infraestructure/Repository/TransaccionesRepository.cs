@@ -45,7 +45,7 @@ namespace Core.Infraestructure.Repository
                 {
                     if (tarjeta.SaldoDisponible >= transaccion.Monto)
                     {
-                         TransactionModel = _mapper.Map<Transaccione>(transaccion);
+                        TransactionModel = _mapper.Map<Transaccione>(transaccion);
                         _context.Transacciones.Add(TransactionModel);
 
                         tarjeta.SaldoActual += transaccion.Monto;
@@ -64,7 +64,22 @@ namespace Core.Infraestructure.Repository
 
                 }
 
-             
+                else
+                {
+                      
+                 
+                        
+                        TransactionModel = _mapper.Map<Transaccione>(transaccion);
+                    TransactionModel.Monto = transaccion.Monto >= tarjeta.SaldoActual ? tarjeta.SaldoActual : transaccion.Monto;
+                        _context.Transacciones.Add(TransactionModel);
+
+                        tarjeta.SaldoActual -= transaccion.Monto;
+
+                        _context.Entry(tarjeta).State = EntityState.Modified;
+
+                        _context.SaveChanges();
+                    
+                }
 
 
 

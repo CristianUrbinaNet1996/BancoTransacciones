@@ -1,0 +1,107 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="card mt-4">
+    <div class="header-card">
+        <h2 class="text-center">Transacciones</h2>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped dataTables-Transacciones">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Descripción</th>
+                    <th>Monto</th>
+                    <th>Tipo</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var transaccion in Model)
+                {
+                    <tr>
+                        <td>@transaccion.FechaTransaccion.ToShortDateString()</td>
+                        <td>@transaccion.Descripcion</td>
+                        <td class="@((transaccion.Monto < 0) ? "text-danger" : "")">$@transaccion.Monto</td>
+                        <td>@transaccion.TipoTransaccionName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    $(document).ready(function () {
+        // Initialize DataTable for Premios table
+        $('.dataTables-Transacciones').DataTable({
+            pageLength: 10,
+            responsive: true,
+            searching: true,
+            paging: true,
+            dom: '<"html5buttons"B>lTfgitp',
+            language: {
+                "decimal": "",
+                "emptyTable": "No hay información",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                "infoEmpty": "Mostrando 0 a 0 de 0 Entradas",
+                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ Entradas",
+                "loadingRecords": "Cargando...",
+                "processing": "Procesando...",
+                "search": "Buscar:",
+                "zeroRecords": "Sin resultados encontrados",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            },
+            buttons: [
+                {
+                    extend: 'excel',
+                    filename: 'Transacciones',
+                    attr: { id: 'EXCEL' },
+                    title: '',
+                    customize: function (xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                        var firstRow = $('row:first', sheet);
+                        if (firstRow.find('c[r^="A"] t').text().trim() === '') {
+                            firstRow.remove();
+                        }
+                        $('row', sheet).each(function (i) {
+                            var row = $(this);
+                            row.attr('r', i + 1);
+                            row.find('c').each(function () {
+                                var cell = $(this);
+                                var cellRef = cell.attr('r');
+                                var col = cellRef.substring(0, 1);
+                                cell.attr('r', col + (i + 1));
+                            });
+                        });
+                    },
+                    action: function (e, dt, button, config) {
+                        Swal.fire({
+                            title: '¿Desea descargar el Excel?',
+                            showDenyButton: true,
+                            showCancelButton: true,
+                            denyButtonColor: '#0b76d6',
+                            showConfirmButton: false,
+                            cancelButtonText: 'Cancelar',
+                            denyButtonText: 'Sí, descargar',
+                        }).then((result) => {
+                            if (result.isDenied) {
+                                $.fn.dataTable.ext.buttons.excelHtml5.action.call(this, e, dt, button, config);
+                            }
+                        })
+                    }
+                }
+            ]
+        });
+    });
+</script>
